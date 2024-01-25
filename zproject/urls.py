@@ -109,6 +109,7 @@ from zerver.views.realm_domains import (
     delete_realm_domain,
     list_realm_domains,
     patch_realm_domain,
+    createRealmApi
 )
 from zerver.views.realm_emoji import delete_emoji, list_emoji, upload_emoji
 from zerver.views.realm_export import delete_realm_export, export_realm, get_realm_exports
@@ -714,7 +715,9 @@ v1_api_mobile_patterns = [
     path("server_settings", api_get_server_settings),
     # This json format view used by the mobile apps accepts a username
     # password/pair and returns an API key.
+    path("create_realm_custom", createRealmApi),
     path("fetch_api_key", api_fetch_api_key),
+
     # The endpoint for regenerating and obtaining a new API key
     # should only be available by authenticating with the current
     # API key - as we consider access to the API key sensitive
