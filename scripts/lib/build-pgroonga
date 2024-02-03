@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+set -euxo pipefail
+
+version="3.1.0"
+sha256=fd020a911ec223f5288e99131c91abb437a9a0aa9d5e51b8fdb96d633bd61fb9
+
+tmpdir="$(mktemp -d)"
+trap 'rm -r "$tmpdir"' EXIT
+cd "$tmpdir"
+tarball="pgroonga-$version.tar.gz"
+curl -fLO --retry 3 "https://github.com/pgroonga/pgroonga/releases/download/$version/$tarball"
+sha256sum -c <<<"$sha256 $tarball"
+tar -xzf "$tarball"
+cd "pgroonga-$version"
+
+make -j "$(nproc)" HAVE_MSGPACK=1
+make install

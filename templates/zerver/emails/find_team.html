@@ -1,0 +1,25 @@
+{% extends "zerver/emails/email_base_default.html" %}
+
+{% block illustration %}
+<img src="{{ email_images_base_url }}/email_logo.png" alt=""/>
+{% endblock %}
+
+{% block content %}
+<p>{{ _("Thanks for your request!") }}</p>
+
+<p>{% trans %}Your email address {{ email }} has accounts with the following Zulip organizations hosted by <a href="{{ external_host }}">{{ external_host }}</a>:{% endtrans %}</p>
+
+<ul>
+    {% for realm in realms %}
+    <li><a href="{{ realm.uri }}">{{ realm.name }} ({{ realm.host }})</a></li>
+    {% endfor %}
+</ul>
+
+<p>
+    {% trans help_url="https://zulip.com/help/change-your-password#if-youve-forgotten-or-never-had-a-password" %}
+    If you have trouble logging in, you can <a href="{{ help_url }}">reset your password</a>.
+    {% endtrans %}
+</p>
+
+<p>{{ _("Thanks for using Zulip!") }}</p>
+{% endblock %}
