@@ -3114,6 +3114,7 @@ AUTH_BACKEND_NAME_MAP: Dict[str, Any] = {
     "Dev": DevAuthBackend,
     "Email": EmailAuthBackend,
     "LDAP": ZulipLDAPAuthBackend,
+    "Password": ZulipLDAPAuthBackend,
 }
 
 for external_method in EXTERNAL_AUTH_METHODS:

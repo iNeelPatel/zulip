@@ -767,6 +767,51 @@ def prepare_realm_activation_url(
         session["confirmation_key"] = {"confirmation_key": activation_url.split("/")[-1]}
     return activation_url
 
+def create_realm_custom(
+    email: str,
+    realm_name: str,
+    string_id: str,
+    org_type: int,
+    default_language: str,
+    full_name: str,
+    password: str,
+) -> str:
+    prereg_realm = create_preregistration_realm(
+        email, realm_name, string_id, org_type, default_language
+    )
+
+    initial_data = {
+        "realm_name": prereg_realm.name,
+        "realm_type": prereg_realm.org_type,
+        "realm_default_language": prereg_realm.default_language,
+        "realm_subdomain": prereg_realm.string_id,
+    }
+
+    realm = do_create_realm(
+        string_id,
+        realm_name,
+        org_type=prereg_realm.org_type,
+        default_language=prereg_realm.default_language,
+        is_demo_organization=False,
+        prereg_realm=prereg_realm,
+    )
+
+    user_profile = do_create_user(
+            email,
+            password,
+            realm,
+            full_name,
+            role=UserProfile.ROLE_REALM_OWNER,
+            timezone="Asia/Calcutta",
+            default_language=default_language,
+            acting_user=None
+        )
+
+    activation_url = create_confirmation_link(
+        prereg_realm, Confirmation.REALM_CREATION, no_associated_realm_object=True
+    )
+
+    return {"user": "Created", "activation_url": activation_url}
 
 def send_confirm_registration_email(
     email: str,
