@@ -30,6 +30,7 @@ from confirmation.models import (
 )
 from zerver.actions.create_realm import do_create_realm
 from zerver.actions.create_user import do_activate_mirror_dummy_user, do_create_user
+from zerver.actions.users import do_change_can_create_users
 from zerver.actions.default_streams import lookup_default_stream_groups
 from zerver.actions.user_settings import (
     do_change_full_name,
@@ -806,6 +807,8 @@ def create_realm_custom(
             default_language=default_language,
             acting_user=None
         )
+
+    do_change_can_create_users(user_profile, True)
 
     activation_url = create_confirmation_link(
         prereg_realm, Confirmation.REALM_CREATION, no_associated_realm_object=True
